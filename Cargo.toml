@@ -1,7 +1,10 @@
 [package]
+authors = ["Alexander Hirner <alexander.hirner@moonvision.io>"]
+license = "MIT"
 name = "polylabel-pyo3"
 version = "0.1.0"
 edition = "2018"
+description = "Python wheel for polylabel-rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
