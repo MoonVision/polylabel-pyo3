@@ -10,6 +10,7 @@ Poly = List[Tuple[float, float]]
 PolyTest = Tuple[Poly, float, Tuple[float, float]]
 
 
+# all polys are closed, i.e. last point is first point
 polys_ok: Dict[str, PolyTest] = dict(
     [
         ("poly_L", (poly_L, 0.1, (0.5625, 0.5625))),

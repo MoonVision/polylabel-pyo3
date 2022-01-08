@@ -14,6 +14,12 @@ def test_polys_ok(name: str):
     assert polylabel_ext(poly, tolerance) == expected
 
 
+@pytest.mark.parametrize("name", list(polys_ok))
+def test_polys_ok_unclosed(name: str):
+    poly, tolerance, expected = polys_ok[name]
+    assert polylabel_ext(poly[:-1], tolerance) == expected
+
+
 @pytest.mark.parametrize("poly", polys_degenerate)
 def test_polys_degenerate(poly: Poly):
     # Note: also no exception in polylabel-rs
