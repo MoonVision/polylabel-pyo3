@@ -1,14 +1,49 @@
+use geo::Polygon;
+use polylabel::errors::PolylabelError;
+use polylabel::polylabel;
+use pyo3::create_exception;
+use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
+use std::fmt;
+use std::fmt::{Debug, Display, Formatter};
 
-/// Formats the sum of two numbers as string.
-#[pyfunction]
-fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
-    Ok((a + b).to_string())
+create_exception!(polylabel_pyo3, PolylabelException, PyValueError);
+
+#[derive(Debug)]
+struct Error(PolylabelError);
+
+impl std::error::Error for Error {}
+
+impl From<PolylabelError> for Error {
+    fn from(e: PolylabelError) -> Self {
+        Error(e)
+    }
 }
 
-/// A Python module implemented in Rust.
+impl From<Error> for PyErr {
+    fn from(e: Error) -> Self {
+        PolylabelException::new_err(format!("{}", e))
+    }
+}
+
+impl Display for Error {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        Display::fmt(&self.0, f)
+    }
+}
+
+/// Calculate visual center from exterior points
+#[pyfunction]
+fn polylabel_ext(exterior: Vec<(f64, f64)>, tolerance: f64) -> Result<(f64, f64), Error> {
+    let poly = Polygon::new(exterior.into(), vec![]);
+    let point = polylabel(&poly, &tolerance)?;
+    Ok(point.x_y())
+}
+
+/// Polylabel algorithm in Rust.
 #[pymodule]
-fn polylabel_pyo3(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(sum_as_string, m)?)?;
+fn polylabel_pyo3(py: Python, m: &PyModule) -> PyResult<()> {
+    m.add("PolylabelException", py.get_type::<PolylabelException>())?;
+    m.add_function(wrap_pyfunction!(polylabel_ext, m)?)?;
     Ok(())
 }
