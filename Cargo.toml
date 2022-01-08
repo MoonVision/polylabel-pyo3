@@ -7,6 +7,10 @@ edition = "2018"
 description = "Python wheel for polylabel-rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[package.metadata.maturin]
+python-source = "python"
+
 [lib]
 name = "polylabel_pyo3"
 crate-type = ["cdylib"]
