@@ -1,5 +1,5 @@
 use geo::Polygon;
-use polylabel::errors::PolylabelError;
+use polylabel::errors::PolylabelError as PolylabelErrorRS;
 use polylabel::polylabel;
 use pyo3::create_exception;
 use pyo3::exceptions::PyValueError;
@@ -7,22 +7,22 @@ use pyo3::prelude::*;
 use std::fmt;
 use std::fmt::{Debug, Display, Formatter};
 
-create_exception!(polylabel_pyo3, PolylabelException, PyValueError);
+create_exception!(polylabel_pyo3, PolylabelError, PyValueError);
 
 #[derive(Debug)]
-struct Error(PolylabelError);
+struct Error(PolylabelErrorRS);
 
 impl std::error::Error for Error {}
 
-impl From<PolylabelError> for Error {
-    fn from(e: PolylabelError) -> Self {
+impl From<PolylabelErrorRS> for Error {
+    fn from(e: PolylabelErrorRS) -> Self {
         Error(e)
     }
 }
 
 impl From<Error> for PyErr {
     fn from(e: Error) -> Self {
-        PolylabelException::new_err(format!("{}", e))
+        PolylabelError::new_err(format!("{}", e))
     }
 }
 
@@ -43,7 +43,7 @@ fn polylabel_ext(exterior: Vec<(f64, f64)>, tolerance: f64) -> Result<(f64, f64)
 /// Polylabel algorithm in Rust.
 #[pymodule]
 fn polylabel_pyo3(py: Python, m: &PyModule) -> PyResult<()> {
-    m.add("PolylabelException", py.get_type::<PolylabelException>())?;
+    m.add("PolylabelError", py.get_type::<PolylabelError>())?;
     m.add_function(wrap_pyfunction!(polylabel_ext, m)?)?;
     Ok(())
 }

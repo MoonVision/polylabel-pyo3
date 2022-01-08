@@ -2,7 +2,7 @@ import os
 
 import polylabel_pyo3
 import pytest
-from polylabel_pyo3 import PolylabelException
+from polylabel_pyo3 import PolylabelError
 
 
 def test_module_doc():
@@ -20,8 +20,8 @@ def test_pyi_init_exists():
 
 def test_exception():
     try:
-        raise PolylabelException("test")
-    except PolylabelException as e:
+        raise PolylabelError("test")
+    except PolylabelError as e:
         assert e.args == ("test",)
 
 

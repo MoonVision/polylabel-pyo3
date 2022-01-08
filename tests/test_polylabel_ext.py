@@ -8,6 +8,26 @@ def test_empty():
     assert polylabel_ext([], 0.1) == (0.0, 0.0)
 
 
+def test_wrong_shape():
+    with pytest.raises(ValueError):
+        polylabel_ext([(1.0,)], 1.0)
+
+
+def test_wrong_type():
+    with pytest.raises(TypeError):
+        polylabel_ext([(0.0, 1.0), ("a", 2.0)], 1.0)
+
+
+def test_wrong_shape_and_type():
+    with pytest.raises(TypeError):
+        polylabel_ext(None, 2.0)
+
+
+def test_list_points_not_coerced():
+    with pytest.raises(TypeError):
+        polylabel_ext([[0, 1], [1, 0]], 1.0)
+
+
 @pytest.mark.parametrize("name", list(polys_ok))
 def test_polys_ok(name: str):
     poly, tolerance, expected = polys_ok[name]

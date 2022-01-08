@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-class PolylabelException(ValueError): ...
+class PolylabelError(ValueError): ...
 
 def polylabel_ext(
     exterior: List[Tuple[float, float]], tolerance: float
