@@ -17,5 +17,5 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      - run: python3 -m pip install . -r requirements.txt
+      - run: python3 -m pip install . -r requirements.txt -v
       - run: python3 -m pytest -v
