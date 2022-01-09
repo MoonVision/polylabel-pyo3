@@ -59,8 +59,18 @@ fn try_from_coords(coord: &PyAny) -> PyResult<Coordinate<f64>> {
 ///
 /// Args:
 ///   exterior: iterable of elements which are accessed at 0 and 1 for coordinates
-///   tolerance: tolerance for optimality of visual center
+///   tolerance: stop sub-dividing a cell if the distance gained between exterior and
+///     its centroid was less than this value
+///
+/// Returns:
+///   coordinates as Tuple[float, float], (0,0) if exterior is degenerate
+////
+/// Raises:
+///     TypeError: If exterior is not iterable
+///     IndexError: If an element can't be indexed at 0 and 1
+///     PolylabelError: Calculation error during grid-based search
 #[pyfunction]
+#[pyo3(text_signature = "(exterior, tolerance)")]
 fn polylabel_ext(exterior: &PyAny, tolerance: f64) -> Result<(f64, f64), Error> {
     let coord_iter = exterior.iter()?.map(|c| c.and_then(try_from_coords));
     let coords = coord_iter.collect::<Result<Vec<_>, _>>()?;
@@ -72,9 +82,19 @@ fn polylabel_ext(exterior: &PyAny, tolerance: f64) -> Result<(f64, f64), Error> 
 /// Calculate pole of accessibility from a two dimensional floating point array.
 ///
 /// Args:
-///   exterior (Nx2): array of coordinates (only np.float(64) supported)
-///   tolerance: tolerance for optimality of visual center
+///   exterior (Nx2): array of coordinates
+///   tolerance: stop sub-dividing a cell if the distance gained between exterior and
+///     its centroid was less than this value
+///
+/// Returns:
+///   coordinates as Tuple[float, float], (0,0) if exterior is degenerate
+////
+/// Raises:
+///     TypeError: If exterior has wrong dtype (only np.float64 supported) or rank
+///     PolylabelShapeError: If axis 1 is not of length 2
+///     PolylabelError: Calculation error during grid-based search
 #[pyfunction]
+#[pyo3(text_signature = "(exterior, tolerance)")]
 fn polylabel_ext_np(exterior: PyReadonlyArray2<f64>, tolerance: f64) -> Result<(f64, f64), Error> {
     // todo: f32
     // we have to clone anyway, because LineString owns a Vec<Coordinate> and
@@ -83,7 +103,7 @@ fn polylabel_ext_np(exterior: PyReadonlyArray2<f64>, tolerance: f64) -> Result<(
     let dim1 = exterior.shape()[1];
     if dim1 != 2 {
         return Err(PolylabelShapeError::new_err(format!(
-            "Expected axis(1) of shape 2, got {}",
+            "Expected axis(1) of length 2, got {}",
             dim1
         ))
         .into());
