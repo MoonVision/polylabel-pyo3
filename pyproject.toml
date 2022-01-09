@@ -17,3 +17,9 @@ include = '\.pyi?$'
 
 [tool.isort]
 profile = "black"
+
+[tool.pytest.ini_options]
+addopts = "-v"
+testpaths = [
+    "tests",
+]
