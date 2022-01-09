@@ -4,16 +4,12 @@ on:
   push:
   pull_request:
 
-env:
-  CARGO_TERM_COLOR: always
-
 jobs:
   lints:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: pre-commit/action@v2.0.3
-
   test:
     strategy:
       matrix:
@@ -21,8 +17,5 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      - uses: messense/maturin-action@v1
-        with:
-          command: build
-      - run: pip install . -r requirements.txt
-      - run: pytest -v
+      - run: python3 -m pip install . -r requirements.txt
+      - run: python3 -m pytest -v
