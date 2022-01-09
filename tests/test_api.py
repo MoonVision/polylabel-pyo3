@@ -2,7 +2,7 @@ import os
 
 import polylabel_pyo3
 import pytest
-from polylabel_pyo3 import PolylabelError
+from polylabel_pyo3 import PolylabelError, PolylabelShapeError
 
 
 def test_module_doc():
@@ -18,14 +18,15 @@ def test_pyi_init_exists():
     assert os.path.isfile(os.path.join(path, "__init__.pyi"))
 
 
-def test_exception():
+@pytest.mark.parametrize("e_type", [PolylabelError, PolylabelShapeError])
+def test_exceptions(e_type):
     try:
         raise PolylabelError("test")
     except PolylabelError as e:
         assert e.args == ("test",)
 
 
-@pytest.mark.parametrize("func_name", ["polylabel_ext"])
+@pytest.mark.parametrize("func_name", ["polylabel_ext", "polylabel_ext_np"])
 def test_function_doc(func_name: str):
     func = getattr(polylabel_pyo3, func_name)
     assert func.__doc__
