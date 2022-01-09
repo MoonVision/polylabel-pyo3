@@ -9,7 +9,7 @@ def test_empty():
 
 
 def test_wrong_shape():
-    with pytest.raises(ValueError):
+    with pytest.raises(IndexError):
         polylabel_ext([(1.0,)], 1.0)
 
 
@@ -23,9 +23,9 @@ def test_wrong_shape_and_type():
         polylabel_ext(None, 2.0)
 
 
-def test_list_points_not_coerced():
-    with pytest.raises(TypeError):
-        polylabel_ext([[0, 1], [1, 0]], 1.0)
+def test_iterable_lists():
+    iterable = (c for c in ([0, 1], [1, 0]))
+    polylabel_ext(iterable, 1.0)
 
 
 @pytest.mark.parametrize("name", list(polys_ok))
@@ -38,6 +38,13 @@ def test_polys_ok(name: str):
 def test_polys_ok_unclosed(name: str):
     poly, tolerance, expected = polys_ok[name]
     assert polylabel_ext(poly[:-1], tolerance) == expected
+
+
+@pytest.mark.parametrize("name", list(polys_ok))
+def test_polys_ok_unclosed_iter_map(name: str):
+    poly, tolerance, expected = polys_ok[name]
+    poly = ({0: c[0], 1: c[1]} for c in poly[:-1])
+    assert polylabel_ext(poly, tolerance) == expected
 
 
 @pytest.mark.parametrize("poly", polys_degenerate)

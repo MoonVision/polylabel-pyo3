@@ -48,19 +48,35 @@ impl Display for Error {
     }
 }
 
-// todo: f32, generic python Iterable[Iterable[float]]
+fn try_from_coords(coord: &PyAny) -> PyResult<Coordinate<f64>> {
+    Ok(Coordinate {
+        x: PyAny::extract::<f64>(coord.get_item(0)?)?,
+        y: PyAny::extract::<f64>(coord.get_item(1)?)?,
+    })
+}
 
-/// Calculate visual center from pairs of exterior points
+/// Calculate pole of accessibility from pairs of exterior points.
+///
+/// Args:
+///   exterior: iterable of elements which are accessed at 0 and 1 for coordinates
+///   tolerance: tolerance for optimality of visual center
 #[pyfunction]
-fn polylabel_ext(exterior: Vec<(f64, f64)>, tolerance: f64) -> Result<(f64, f64), Error> {
-    let poly = Polygon::new(exterior.into(), vec![]);
+fn polylabel_ext(exterior: &PyAny, tolerance: f64) -> Result<(f64, f64), Error> {
+    let coord_iter = exterior.iter()?.map(|c| c.and_then(try_from_coords));
+    let coords = coord_iter.collect::<Result<Vec<_>, _>>()?;
+    let poly = Polygon::new(LineString(coords), vec![]);
     let point = polylabel(&poly, &tolerance)?;
     Ok(point.x_y())
 }
 
-/// Calculate visual center from a two dimensional array
+/// Calculate pole of accessibility from a two dimensional floating point array.
+///
+/// Args:
+///   exterior (Nx2): array of coordinates (only np.float(64) supported)
+///   tolerance: tolerance for optimality of visual center
 #[pyfunction]
 fn polylabel_ext_np(exterior: PyReadonlyArray2<f64>, tolerance: f64) -> Result<(f64, f64), Error> {
+    // todo: f32
     // we have to clone anyway, because LineString owns a Vec<Coordinate> and
     // - Polygon may push one Coordinate to close it on ::new
     // - Coordinate has no C/defined memory layout
