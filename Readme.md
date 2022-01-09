@@ -1,6 +1,6 @@
 [![Test](https://github.com/MoonVision/polylabel-pyo3/actions/workflows/test.yml/badge.svg)](https://github.com/MoonVision/polylabel-pyo3/actions/workflows/test.yml)
 [![Build](https://github.com/MoonVision/polylabel-pyo3/actions/workflows/build.yml/badge.svg)](https://github.com/MoonVision/polylabel-pyo3/actions/workflows/build.yml)
-[![Benchmark](https://github.com/MoonVision/polylabel-pyo3/actions/workflows/bench.yml/badge.svg)](https://github.com/MoonVision/polylabel-pyo3/actions/workflows/bench.yml)
+[![Benchmark](https://github.com/MoonVision/polylabel-pyo3/actions/workflows/bench.yml/badge.svg)](https://github.com/MoonVision/polylabel-pyo3/actions/workflows/bench.yml) [![PyPI version](https://badge.fury.io/py/polylabel-pyo3.svg)](https://badge.fury.io/py/polylabel-pyo3)
 
 # polylabel-pyo3
 
