@@ -22,5 +22,5 @@ crate-type = ["cdylib"]
 [dependencies]
 polylabel = "2.4.0"
 geo = "*"
-pyo3 = { version = "0.15.1", features = ["extension-module"] }
-numpy = "0.15"
+pyo3 = { version = "0.16", features = ["extension-module"] }
+numpy = "0.16"

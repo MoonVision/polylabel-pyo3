@@ -50,7 +50,7 @@ Drag your shape with the mouse and observe a `momentum` based center in grey and
 Requirements:
 
 - Rust Toolchain
-- Python >=3.6
+- Python >=3.7
 
 In a `venv` or conda `env`:
 ```
