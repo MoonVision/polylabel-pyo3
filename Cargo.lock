@@ -150,20 +150,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "geo"
-version = "0.19.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "61faf6a68f9432b5287c393268e86a07e4dfed79e6e0962b0e6e59b2f70c77d8"
-dependencies = [
- "geo-types",
- "geographiclib-rs",
- "log",
- "num-traits",
- "robust",
- "rstar",
-]
-
-[[package]]
 name = "geo-types"
 version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -374,7 +360,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7c4b37986714209d5198eee1c296faf9dd1122abd43b374636a80d7dbe0c8dfb"
 dependencies = [
  "cbindgen",
- "geo 0.17.1",
+ "geo",
  "libc",
  "num-traits",
  "thiserror",
@@ -382,9 +368,9 @@ dependencies = [
 
 [[package]]
 name = "polylabel-pyo3"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
- "geo 0.19.0",
+ "geo",
  "numpy",
  "polylabel",
  "pyo3",
